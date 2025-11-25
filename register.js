@@ -7,7 +7,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const res = await fetch("http://localhost:3000/register", {
+    const res = await fetch("https://teacat-backend.onrender.com/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password })
