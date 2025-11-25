@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">茶貓商店</div>
+
+        <div class="menu">
+            <a href="food">Food</a> <!-- 食物 -->
+            <a href="toy">Toy</a> <!-- 玩具 -->
+            <a href="carton">Carton</a> <!-- 紙箱 -->
+            <a href="cat-litter">Cat-litter</a> <!-- 貓砂 -->
+        </div>
+
+        <div class="cart">
+            &#128722;<!-- 購物車符號 -->
+            <span class="badge">5</span>
+        </div>
+        
+        <div class="hamburger">&#9776;</div><!-- ☰符號 -->
+
+    </nav>
+        <div class="overlay"></div>
+        <div class="banner">
+            <h1>tea cat Shop</h1>
+            <p>Welcome to tea cat Shop</p>
+            <a class="btn">Shop Now</a>
+        </div>
+
+        <div class="mobile-menu">
+            <a>Food</a>
+            <a>Toy</a>
+            <a>Carton</a>
+            <a>Cat-litter</a>
+        </div>
+
+</body>
+    <script>   
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const overlay = document.querySelector('.overlay');
+
+        hamburger.onclick = () => {
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        };
+
+        overlay.onclick = () => {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        };
+    </script>
+
+    <section class="products">   
+        <h2>Featured Products(特色產品)</h2>
+
+        <div class="product-grid">
+
+            <div class="product-card">
+                <img src="img/product1.jpg">
+                <h5>新品專區</h5>
+                <p class="price">$199</p>
+                <p class="rating">&#9733; (777)</p><!-- ★符號 -->
+                <button class="add-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="img/product2.jpg">
+                <h5>聯名商品</h5>
+                <p class="price">$399</p>
+                <p class="rating">&#9733; (999)</p><!-- ★符號 -->
+                <button class="add-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="img/product3.jpg">
+                <h5>五折優惠</h5>
+                <p class="price">$599</p>
+                <p class="rating">&#9733; (1888)</p><!-- ★符號 -->
+                <button class="add-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="img/product4.jpg">
+                <h5>期限限定</h5>
+                <p class="price">$99</p>
+                <p class="rating">&#9733; (99)</p><!-- ★符號 -->
+                <button class="add-cart">Add to Cart</button>
+            </div>
+    </section>
+
+    <section class="categories">
+        <div class="category-card">
+            <img src="img/Food.jpg">
+            <p>Food</p> 
+        </div>
+
+        <div class="category-card">
+            <img src="img/Toy.jpg">
+            <p>Toy</p> 
+        </div>
+
+        <div class="category-card">
+            <img src="img/Carton.jpg">
+            <p>Carton</p> 
+        </div>
+
+        <div class="category-card">
+            <img src="img/Cat-litter.jpg">
+            <p>Cat-litter</p> 
+        </div>
+    </section>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <h3>茶貓商店 Tea Cat Shop</h3>
+                <p>連絡電話:0975-091-310</p>
+                <p>Email:teacatshop@gmail.com </p>
+                <p>營業時間:10:00-20:00</p>
+                <p>地址:新北市林口區仁愛路二段508號</p>
+                </div>
+
+                <div class="footer-bottom">
+                    @ 2025 Tea Cat Shop. All Rights Reserved.
+                </div>
+        </footer>
+</html>
