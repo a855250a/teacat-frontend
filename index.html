@@ -3,50 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 
 <body>
-    <nav>
-        <div class="logo">茶貓商店</div>
+    <nav class="nav">
 
-        <div class="menu">
-            <a href="food">Food</a> <!-- 食物 -->
-            <a href="toy">Toy</a> <!-- 玩具 -->
-            <a href="carton">Carton</a> <!-- 紙箱 -->
-            <a href="cat-litter">Cat-litter</a> <!-- 貓砂 -->
-        </div>
+    <div class="nav-left">
+        <a href="index.html" class="logo">茶貓商店</a>
 
-        <div class="cart">
-            &#128722;<!-- 購物車符號 -->
-            <span class="badge">5</span>
-        </div>
+        <a href="food.html">飼料</a>
+        <a href="toy.html">玩具</a>
+        <a href="carton.html">貓砂</a>
+        <a href="carton.html">貓抓板</a>
+        <a href="clean.html">清潔用品</a>
+        <a href="health.html">保健食品</a>
+    </div>
+
+    <div class="nav-right" id="navAuthArea">
+        <a href="login.html" class="nav-link" id="loginLink">登入</a>
+        <a href="register.html" class="nav-link" id="registerLink">註冊</a>
+
+        <a href="member.html" class="nav-link hidden" id="memberLink">會員中心</a>
+        <a href="#" class="nav-link hidden" id="logoutLink">登出</a>
+
+        <!-- Apple 風購物袋 -->
+        <a href="cart.html" class="cart-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 7h12l1 12H5L6 7z"></path>
+                <path d="M9 7a3 3 0 0 1 6 0"></path>
+            </svg>
+        </a>
+    </div>
+
+    <!-- 手機版漢堡選單 -->
+    <div class="hamburger">&#9776;</div>
+
+</nav>
+
         
-        <div class="auth">
-        <a href="login.html" class="auth-btn">登入</a><!-- 登入 -->
-        <a href="register.html" class="auth-btn">註冊</a><!-- 註冊 -->
+    <section class="member-banner">
+    <div class="banner-left">
+        <img src="img/QR code.jpg" alt="加入會員 QR">
+    </div>
+
+    <div class="banner-right">
+        <h2 class="banner-title">加入茶貓會員，享受專屬優惠！</h2>
+        <p class="banner-sub">立即加入，獲得最新優惠通知、生日禮與專屬折扣。</p>
+
+        <div class="banner-box">
+            <h3>新人禮 50 元折扣券</h3>
+            <p>加入即送新人折扣券，消費立即折抵。</p>
         </div>
 
-
-        <div class="hamburger">&#9776;</div><!-- ☰符號 -->
-
-    </nav>
-        <div class="overlay"></div>
-        <div class="banner">
-            <h1>tea cat Shop</h1>
-            <p>Welcome to tea cat Shop</p>
-            <a class="btn">Shop Now</a>
+        <div class="banner-box">
+            <h3>每月專屬優惠通知</h3>
+            <p>會員每月首週五，寄送當月限定折扣碼。</p>
         </div>
 
-        <div class="mobile-menu">
-            <a>Food</a>
-            <a>Toy</a>
-            <a>Carton</a>
-            <a>Cat-litter</a>
-        </div>
+        <a href="register.html" class="banner-cta">立即加入會員</a>
+    </div>
+</section>
 
-</body>
+
+
+
     <script>   
         const hamburger = document.querySelector('.hamburger');
         const mobileMenu = document.querySelector('.mobile-menu');
@@ -101,28 +125,36 @@
             </div>
     </section>
 
-    <section class="categories">
-        <div class="category-card">
-            <img src="img/Food.jpg">
-            <p>Food</p> 
+    <section class="info-section">
+
+    <div class="info-left slideshow">
+        <img src="img/banner1.jpg" class="slide active">
+        <img src="img/banner2.jpg" class="slide">
+        <img src="img/banner3.jpg" class="slide">
+    </div>
+
+
+    <div class="info-right">
+        <h2>NEWS</h2>
+
+        <div class="info-item">
+            <p class="date">2025-11-20</p>
+            <p class="title">BAG PROJECT｜丹寧保溫袋 溫暖上市</p>
         </div>
 
-        <div class="category-card">
-            <img src="img/Toy.jpg">
-            <p>Toy</p> 
+        <div class="info-item">
+            <p class="date">2025-11-25</p>
+            <p class="title">CAFFEINE-free PROJECT｜蕎麥綠寶 輕盈上市</p>
         </div>
 
-        <div class="category-card">
-            <img src="img/Carton.jpg">
-            <p>Carton</p> 
+        <div class="info-item">
+            <p class="date">2025-11-30</p>
+            <p class="title">7-ELEVEN PROJECT 2｜芝士奶蓋焙烏龍奶酪 奶香上市</p>
         </div>
 
-        <div class="category-card">
-            <img src="img/Cat-litter.jpg">
-            <p>Cat-litter</p> 
-        </div>
-    </section>
-
+        <a class="more-link" href="#">MORE</a>
+    </div>
+</section>
         <footer class="footer">
             <div class="footer-content">
                 <h3>茶貓商店 Tea Cat Shop</h3>
@@ -136,4 +168,87 @@
                     @ 2025 Tea Cat Shop. All Rights Reserved.
                 </div>
         </footer>
+
+        <script>
+            let slideIndex = 0;
+            const slides = document.querySelectorAll(".slideshow .slide");
+
+            function showSlides() {
+            slides.forEach(slide => slide.classList.remove("active"));
+            slideIndex = (slideIndex + 1) % slides.length;
+            slides[slideIndex].classList.add("active");
+        }
+            setInterval(showSlides, 3000);
+        </script>
+
+        <div class="social-icons">
+            <a href="https://www.facebook.com/cai.qi.hua.705092" target="_blank" class="icon fb">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="FB">
+        </a>
+
+        <a href="https://www.instagram.com/hua036/" target="_blank" class="icon ig">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="IG">
+        </a>
+
+        <a href="https://line.me/ti/p/BOuO--4dX1" target="_blank" class="icon line">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/line.svg" alt="LINE">
+        </a>
+
+        </div>
+
+        <button id="backToTop" class="back-to-top">
+            <img src="https://cdn-icons-png.flaticon.com/512/892/892692.png" alt="Top">
+        </button>
+
+        <script>
+        const navArea = document.getElementById("navAuthArea");
+
+        const isAdmin = localStorage.getItem("admin") === "true";
+        const userToken = localStorage.getItem("token");
+
+        // --------------------------------------
+        // 未登入（訪客）
+        // --------------------------------------
+        if (!isAdmin && !userToken) {
+        navArea.innerHTML = `
+            <a href="login.html" class="nav-link">登入</a>
+            <a href="register.html" class="nav-link">註冊</a>
+            <a href="cart.html" class="cart-icon">
+            🛍
+            </a>
+        `;
+        }
+
+        // --------------------------------------
+        // 一般會員登入
+        // --------------------------------------
+        if (userToken && !isAdmin) {
+        navArea.innerHTML = `
+            <a href="member.html" class="nav-link">會員中心</a>
+            <a href="#" id="logoutBtn" class="nav-link">登出</a>
+            <a href="cart.html" class="cart-icon">🛍</a>
+        `;
+        }
+
+        // --------------------------------------
+        // 後台管理員登入
+        // --------------------------------------
+        if (isAdmin) {
+        navArea.innerHTML = `
+        <a href="admin.html" class="nav-link">後台管理</a>
+        <a href="#" id="logoutBtn" class="nav-link">登出</a>
+        <a href="cart.html" class="cart-icon">🛍</a>
+        `;
+    }
+
+        // --------------------------------------
+        // 登出（通用）
+        // --------------------------------------
+        document.querySelector("#logoutBtn")?.addEventListener("click", () => {
+        localStorage.removeItem("admin");
+        localStorage.removeItem("token");
+        window.location.reload();
+    });
+    </script>
+</body>
 </html>

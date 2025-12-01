@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品分類 | 茶貓商店</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="category.js"></script>
+</head>
+
+<body>
+
+    <!-- 導覽列 -->
+    <nav class="nav">
+
+        <div class="nav-left">
+
+            <!-- Logo 最左邊－可回首頁 -->
+            <a href="index.html" class="logo">茶貓商店</a>
+
+            <!-- 中文分類列表 -->
+            <a href="category.html?category=飼料">飼料</a>
+            <a href="category.html?category=玩具">玩具</a>
+            <a href="category.html?category=貓砂">貓砂</a>
+            <a href="category.html?category=貓抓板">貓抓板</a>
+            <a href="category.html?category=清潔用品">清潔用品</a>
+            <a href="category.html?category=保健食品">保健食品</a>
+        </div>
+
+        <!-- 右上角購物車 -->
+        <div class="nav-right">
+            <a href="cart.html" class="cart-icon">🛍</a>
+        </div>
+    </nav>
+
+    <!-- 商品區 -->
+    <section class="products">
+        <h2 class="category-title" id="categoryTitle">商品分類</h2>
+
+        <div class="category-grid" id="productList">
+            <!-- JS 自動載入商品 -->
+        </div>
+    </section>
+
+</body>
+</html>

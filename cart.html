@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>購物車 | 茶貓商店</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+        .cart-wrapper {
+            max-width: 800px;
+            margin: 120px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 18px;
+        }
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 40px 0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="cart-wrapper">
+    <h2>購物車</h2>
+
+    <div id="cartList"></div>
+</div>
+
+<script>
+    function loadCart() {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const list = document.getElementById("cartList");
+
+        if (cart.length === 0) {
+            list.innerHTML = `<p class="empty">購物車目前是空的</p>`;
+            return;
+        }
+
+        list.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <span>${item.name} × ${item.qty}</span>
+                <span>$${item.price * item.qty}</span>
+            </div>
+        `).join("");
+    }
+
+    loadCart();
+</script>
+
+</body>
+</html>

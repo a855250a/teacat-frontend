@@ -15,4 +15,11 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
     const data = await res.json();
     document.getElementById("msg").innerText = data.message;
+
+    if (data.success) {
+        //1秒後跳轉到登入頁
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1000);
+    }
 });

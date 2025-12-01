@@ -211,16 +211,16 @@ a:hover{
 
 .products{
     padding: 40px 5%;
+    margin-top: 20px !important;
 }
 
 .product-card{
     background: #fff;
     border-radius: 12px;
-    padding: 16px;
+    padding: 1px;
     box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     transition: transform 0.25s ease,box-shadow 0.25s ease;
     text-align: center;
-
 }
 
 .products h2 {
@@ -235,6 +235,79 @@ a:hover{
     grid-template-columns: repeat(4,1fr);
     gap: 24px;
 }
+
+/* --- INFORMATION 區塊 完整修正版 --- */
+.info-section {
+    display: flex;
+    width: 100%;
+    min-height: 600px;          /* 改成 min-height 不會被壓縮 */
+    align-items: stretch;       /* 左右兩邊拉到等高 */
+    margin-top: 40px;
+}
+
+/* 左側輪播 */
+.slideshow {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+    min-height: 600px;          /* 強制固定高度，圖片會正常顯示 */
+}
+
+/* 每張輪播圖 */
+.slideshow img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.slideshow img.active {
+    opacity: 1;
+}
+
+/* 右側 INFORMATION */
+.info-right {
+    width: 50%;
+    padding: 50px;
+    background: white;
+    box-sizing: border-box;
+}
+
+.info-right h2 {
+    font-size: 36px;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+}
+
+.info-item {
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+}
+
+.info-item .date {
+    font-size: 14px;
+    color: #777;
+}
+
+.info-item .title {
+    font-size: 18px;
+    margin-top: 6px;
+}
+
+.more-link {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid black;
+    background: white;
+    color: black;
+    margin-top: 10px;
+}
+
 
 .product-card img {
     object-fit: cover;
@@ -285,6 +358,7 @@ a:hover{
     width: 100%;
     color:#333;
     text-align: center;
+    margin-top: 40px;
 }
 
 .footer-content h3 {
@@ -311,4 +385,339 @@ a:hover{
     margin: 100px auto;
     padding: 20px;
     text-align: center;
+}
+
+/* ===== SOCIAL ICON BUTTONS ===== */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    background:#f5f5f5;
+}
+
+.social-icons .icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+}
+
+/* Facebook theme */
+.icon.fb {
+    border-color: #1877F2;
+}
+.icon.fb:hover {
+    background: #1877F2;
+}
+.icon.fb:hover img {
+    filter: brightness(0) invert(1);
+} 
+
+/* Instagram theme */
+.icon.ig {
+    border-color: #E1306C;
+}
+.icon.ig:hover {
+    background: #E1306C;
+}
+.icon.ig:hover img {
+    filter: brightness(0) invert(1);
+}
+
+/* LINE theme */
+.icon.line {
+    border-color: #06C755;
+}
+.icon.line:hover {
+    background: #06C755;
+}
+.icon.line:hover img {
+    filter: brightness(0) invert(1);
+}
+
+/* ===== BACK TO TOP BUTTON ===== */
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 50%;
+    border: 2px solid #333;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    padding: 5px;
+}
+
+.back-to-top img {
+    width: 22px;
+    height: 22px;
+}
+
+.back-to-top:hover {
+    background: #333;
+}
+
+.back-to-top:hover img {
+    filter: brightness(0) invert(1);
+}
+
+/* ------------- Apple Style Navbar ------------- */
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 26px; /* Apple 的固定間距 */
+}
+
+.nav a,
+.nav .logo {
+    font-size: 16px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.nav a:hover {
+    color: #111;
+}
+
+.nav a {
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+
+
+.cart-icon {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+
+/* 隱藏 class 用於登入/登出切換 */
+.hidden {
+    display: none !important;
+}
+
+/* RWD：縮小依然不亂掉 */
+@media (max-width: 850px) {
+    .nav {
+        padding: 12px 20px;
+    }
+
+    .nav-left {
+        gap: 14px;
+    }
+}
+
+
+.member-banner {
+    max-width: 1200px;
+    margin: 50px auto;
+    margin-bottom: 40px !important; /* 比現在小 */
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 40px;
+    background: #fafaff;
+    border-radius: 20px;
+    border: 1px solid #eee;
+}
+
+.banner-left img {
+    width: 260px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.banner-right {
+    flex: 1;
+}
+
+.banner-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #4c4bb8;
+    margin-bottom: 10px;
+}
+
+.banner-sub {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.banner-box {
+    background: white;
+    padding: 20px;
+    margin-bottom: 18px;
+    border-radius: 12px;
+    border-left: 6px solid #6a5acd;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.banner-box h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.banner-box p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.banner-cta {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 12px 30px;
+    background: #6a5acd;
+    color: white;
+    border-radius: 50px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.banner-cta:hover {
+    background: #4c4bb8;
+}
+
+/* RWD */
+@media (max-width: 850px) {
+    .member-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .banner-left img {
+        width: 220px;
+    }
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* --- CATEGORY PAGE (不影響首頁的獨立樣式) --- */
+
+.category-title {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* 一列三個 */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 20px 5%;
+}
+
+.category-card {
+    background: white;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    transition: 0.25s ease;
+    border: 1px solid #eee;
+}
+
+.category-card img {
+    width: 100%;
+    height: 220px;  /* 正方形風格 */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.category-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* 文字 */
+.category-card h5 {
+    margin: 12px 0 6px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.category-card .price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff5722;
+}
+
+.category-card .rating {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.category-card button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
+.category-card button:hover {
+    background: #555;
+}
+
+/* RWD */
+@media (max-width: 768px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cart-icon svg {
+    transition: 0.25s;
+}
+
+.cart-icon:hover svg {
+    transform: scale(1.15);
+    stroke: #000; /* hover時變深色 */
 }

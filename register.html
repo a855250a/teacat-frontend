@@ -1,28 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>註冊 | 茶貓商店</title>
+    <link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
-    <div class="auth-container">
-    <h1>Register</h1>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2 class="auth-title">註冊會員</h2>
 
-    <form id="registerForm">
-        <input type="text" id="name" placeholder="Name" />
-        <br>
-        <input type="email" id="email" placeholder="Email" />
-        <br>
-        <input type="password" id="password" placeholder="Password" />
-        <br>
-        <button type="submit">Register</button>
-    </form>
+            <form id="regForm">
 
-    <p id="msg"></p>
-</div>
-    <script src="register.js"></script>
-    
+                <label class="auth-label">姓名</label>
+                <input type="text" id="name" placeholder="請輸入姓名" required>
+                <br>
+                <br>
+                <label class="auth-label">Email</label>
+                <input type="email" id="email" placeholder="請輸入 Email" required>
+                <br>
+                <br>
+                <label class="auth-label">密碼</label>
+                <input type="password" id="password" placeholder="請輸入密碼" required>
+                <br>
+                <br>
+                <button type="submit" class="auth-btn">註冊</button>
+            </form>
+
+            <p id="msg"></p>
+
+            <div class="auth-links center">
+                <a href="login.html">已有帳號？前往登入</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const form = document.getElementById("regForm");
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const res = await fetch("https://teacat-backend.onrender.com/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const data = await res.json();
+            msg.innerText = data.message;
+
+            if (data.success) {
+                msg.style.color = "green";
+
+                // ⭐⭐⭐ 註冊成功 → 自動跳轉登入頁面
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1200);
+            } else {
+                msg.style.color = "red";
+            }
+
+        } catch (err) {
+            msg.innerText = "連線失敗，請稍後再試。";
+            msg.style.color = "red";
+        }
+    });
+</script>
+
 </body>
 </html>
