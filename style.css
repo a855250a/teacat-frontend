@@ -721,3 +721,43 @@ a:hover{
     transform: scale(1.15);
     stroke: #000; /* hover時變深色 */
 }
+
+
+/* 下拉選單 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+    color: black;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: white;
+    min-width: 150px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown-content a:hover {
+    background: #f3f3f3;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}

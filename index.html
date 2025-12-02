@@ -10,18 +10,22 @@
 
 <body>
     <nav class="nav">
-
+    <!-- 左邊：Logo -->
     <div class="nav-left">
         <a href="index.html" class="logo">茶貓商店</a>
-
-        <a href="food.html">飼料</a>
-        <a href="toy.html">玩具</a>
-        <a href="carton.html">貓砂</a>
-        <a href="carton.html">貓抓板</a>
-        <a href="clean.html">清潔用品</a>
-        <a href="health.html">保健食品</a>
     </div>
 
+    <!-- 中間：商品分類 -->
+    <div class="nav-center">
+        <a href="category.html?category=飼料">飼料</a>
+        <a href="category.html?category=玩具">玩具</a>
+        <a href="category.html?category=貓砂">貓砂</a>
+        <a href="category.html?category=貓抓板">貓抓板</a>
+        <a href="category.html?category=清潔用品">清潔用品</a>
+        <a href="category.html?category=保健食品">保健食品</a>
+    </div>
+
+    <!-- 右邊：登入、註冊、購物車 -->
     <div class="nav-right" id="navAuthArea">
         <a href="login.html" class="nav-link" id="loginLink">登入</a>
         <a href="register.html" class="nav-link" id="registerLink">註冊</a>
@@ -29,14 +33,28 @@
         <a href="member.html" class="nav-link hidden" id="memberLink">會員中心</a>
         <a href="#" class="nav-link hidden" id="logoutLink">登出</a>
 
-        <!-- Apple 風購物袋 -->
+        <!-- 後台管理 dropdown（管理者登入才顯示） -->
+        <div class="dropdown hidden" id="adminMenu">
+            <button class="dropbtn">後台管理 ▼</button>
+            <div class="dropdown-content">
+                <a href="admin.html">新增商品</a>
+                <a href="admin-staff.html">管理者管理</a>
+            </div>
+        </div>
+
+
+        <!-- 購物車改成文字 -->
+        <a href="cart.html" class="nav-cart">購物車</a>
+
+
+        <!-- Apple 風購物袋
         <a href="cart.html" class="cart-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
             stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 7h12l1 12H5L6 7z"></path>
                 <path d="M9 7a3 3 0 0 1 6 0"></path>
             </svg>
-        </a>
+        </a> -->
     </div>
 
     <!-- 手機版漢堡選單 -->
@@ -201,54 +219,86 @@
         </button>
 
         <script>
-        const navArea = document.getElementById("navAuthArea");
-
+        const token = localStorage.getItem("token");
         const isAdmin = localStorage.getItem("admin") === "true";
-        const userToken = localStorage.getItem("token");
 
-        // --------------------------------------
-        // 未登入（訪客）
-        // --------------------------------------
-        if (!isAdmin && !userToken) {
-        navArea.innerHTML = `
-            <a href="login.html" class="nav-link">登入</a>
-            <a href="register.html" class="nav-link">註冊</a>
-            <a href="cart.html" class="cart-icon">
-            🛍
-            </a>
-        `;
+        const loginLink = document.getElementById("loginLink");
+        const registerLink = document.getElementById("registerLink");
+        const memberLink = document.getElementById("memberLink");
+        const logoutLink = document.getElementById("logoutLink");
+        const adminMenu = document.getElementById("adminMenu");
+
+        // 未登入
+        if (!token && !isAdmin) {
+        loginLink.classList.remove("hidden");
+        registerLink.classList.remove("hidden");
         }
 
-        // --------------------------------------
-        // 一般會員登入
-        // --------------------------------------
-        if (userToken && !isAdmin) {
-        navArea.innerHTML = `
-            <a href="member.html" class="nav-link">會員中心</a>
-            <a href="#" id="logoutBtn" class="nav-link">登出</a>
-            <a href="cart.html" class="cart-icon">🛍</a>
-        `;
+        // 會員登入
+        if (token) {
+        loginLink.classList.add("hidden");
+        registerLink.classList.add("hidden");
+
+        memberLink.classList.remove("hidden");
+        logoutLink.classList.remove("hidden");
         }
 
-        // --------------------------------------
-        // 後台管理員登入
-        // --------------------------------------
+        // 後台管理者登入
         if (isAdmin) {
-        navArea.innerHTML = `
-        <a href="admin.html" class="nav-link">後台管理</a>
-        <a href="#" id="logoutBtn" class="nav-link">登出</a>
-        <a href="cart.html" class="cart-icon">🛍</a>
-        `;
-    }
+        loginLink.classList.add("hidden");
+        registerLink.classList.add("hidden");
 
-        // --------------------------------------
-        // 登出（通用）
-        // --------------------------------------
-        document.querySelector("#logoutBtn")?.addEventListener("click", () => {
-        localStorage.removeItem("admin");
+        adminMenu.classList.remove("hidden");
+        logoutLink.classList.remove("hidden");
+        }
+
+        // 登出（會員/管理者）
+        logoutLink?.addEventListener("click", () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("admin");
         window.location.reload();
     });
+    </script>
+
+        <script>
+        const token = localStorage.getItem("token");
+        const admin = localStorage.getItem("admin");
+
+        const loginLink = document.getElementById("loginLink");
+        const registerLink = document.getElementById("registerLink");
+        const memberLink = document.getElementById("memberLink");
+        const logoutLink = document.getElementById("logoutLink");
+        const adminLink = document.getElementById("adminLink");
+
+        // 先全部隱藏
+        memberLink.classList.add("hidden");
+        logoutLink.classList.add("hidden");
+        adminLink.classList.add("hidden");
+
+        // === 後台登入 ===
+        if (admin === "true") {
+        loginLink.classList.add("hidden");
+        registerLink.classList.add("hidden");
+
+        adminLink.classList.remove("hidden");  // 顯示後台管理
+        logoutLink.classList.remove("hidden");
+        }
+        // === 一般會員登入 ===
+        else if (token) {
+        loginLink.classList.add("hidden");
+        registerLink.classList.add("hidden");
+
+        memberLink.classList.remove("hidden"); // 顯示會員中心
+        logoutLink.classList.remove("hidden");
+        }
+
+        // 登出
+        logoutLink?.addEventListener("click", function () {
+        localStorage.removeItem("token");
+        localStorage.removeItem("admin");
+        window.location.href = "index.html";
+        });
+
     </script>
 </body>
 </html>

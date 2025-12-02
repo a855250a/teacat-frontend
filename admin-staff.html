@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>後台管理者管理 | 茶貓商店</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+
+<!-- ====== 後台權限檢查 ====== -->
+<script>
+if (localStorage.getItem("admin") !== "true") {
+    alert("沒有後台權限，請先登入管理者");
+    window.location.href = "login.html";
+}
+</script>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2 class="auth-title">新增後台管理者</h2>
+
+        <form id="adminCreateForm">
+            <label>管理者帳號</label>
+            <input type="text" id="username" placeholder="輸入帳號" required>
+
+            <label>管理者密碼</label>
+            <input type="password" id="password" placeholder="輸入密碼" required>
+
+            <button type="submit" class="auth-btn">新增管理者</button>
+        </form>
+
+        <p id="msg"></p>
+
+        <hr style="margin: 30px 0;">
+
+        <h3>目前管理者列表</h3>
+        <div id="adminList" class="admin-list"></div>
+    </div>
+</div>
+
+<script src="admin-staff.js"></script>
+
+</body>
+</html>
