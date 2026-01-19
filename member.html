@@ -1,87 +1,58 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>會員中心 | 茶貓商店</title>
-    <link rel="stylesheet" href="auth.css"> 
-    <style>
-        .member-wrapper {
-            max-width: 600px;
-            margin: 120px auto;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-        .member-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #444;
-        }
-        .member-info {
-            font-size: 20px;
-            margin-top: 20px;
-            line-height: 1.8;
-            color: #555;
-        }
-        .logout-btn {
-            margin-top: 30px;
-            padding: 10px 20px;
-            border: none;
-            background: #6c63ff;
-            color: #fff;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>會員中心 | 茶貓商店</title>
+
+<style>
+    body { font-family: Arial; background:#fafafa; margin:0; padding:0; }
+    .wrapper { max-width: 800px; margin: 80px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.08); }
+    h2 { margin-top:0; }
+    .order-box { padding:18px; border:1px solid #eee; margin-bottom:15px; border-radius:10px; }
+    .order-box:hover { background:#f7f7f7; cursor:pointer; }
+</style>
 </head>
 
 <body>
 
-<div class="member-wrapper">
-    <h2 class="member-title">會員中心</h2>
+<div class="wrapper">
+    <h2>會員中心</h2>
 
-    <div class="member-info">
-        <p><strong>姓名：</strong><span id="memberName"></span></p>
-        <p><strong>Email：</strong><span id="memberEmail"></span></p>
-    </div>
-
-    <button class="logout-btn" id="logoutBtn">登出</button>
+    <h3>我的訂單</h3>
+    <div id="orderList">載入中...</div>
 </div>
 
 <script>
-    // 如果沒有登入 → 回登入頁
-    const token = localStorage.getItem("token");
-    if (!token) {
-        window.location.href = "login.html";
-    }
+const token = localStorage.getItem("token");
 
-    // 向後端取得會員資料
-    async function loadProfile() {
-        const res = await fetch("https://teacat-backend.onrender.com/profile", {
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        });
+if (!token) {
+    alert("請先登入！");
+    window.location.href = "login.html";
+}
 
-        const data = await res.json();
-
-        if (data.success) {
-            document.getElementById("memberName").innerText = data.user.name;
-            document.getElementById("memberEmail").innerText = data.user.email;
-        }
-    }
-
-    loadProfile();
-
-    // 登出
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.removeItem("token");
-        window.location.href = "index.html";
+async function loadOrders() {
+    const res = await fetch("https://teacat-backend-1.onrender.com/order/my", {
+        headers: { "Authorization": "Bearer " + token }
     });
+
+    const data = await res.json();
+    const list = document.getElementById("orderList");
+
+    if (!data.success || data.orders.length === 0) {
+        list.innerHTML = "<p>目前沒有訂單</p>";
+        return;
+    }
+
+    list.innerHTML = data.orders.map(o => `
+        <div class="order-box" onclick="location.href='order-detail.html?id=${o._id}'">
+            <p><strong>訂單編號：</strong>${o._id}</p>
+            <p><strong>總金額：</strong>$${o.total}</p>
+            <p><strong>日期：</strong>${new Date(o.createdAt).toLocaleString()}</p>
+        </div>
+    `).join("");
+}
+
+loadOrders();
 </script>
 
 </body>

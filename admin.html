@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品管理 | 茶貓商店</title>
-    <link rel="stylesheet" href="auth.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品管理 | 茶貓商店</title>
+  <link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
-    <div class="auth-wrapper">
-        <div class="auth-card">
+  <div class="auth-wrapper">
+    <div class="auth-card">
 
-            <h2 class="auth-title">新增商品</h2>
+      <h2 class="auth-title">新增商品</h2>
 
-            <!-- 新增商品表單 -->
-            <form id="productForm">
+      <!-- 新增商品表單 -->
+      <form id="productForm">
 
-                <label>商品名稱</label>
-                <input type="text" id="name" required>
+        <label>商品名稱</label>
+        <input type="text" id="name" required>
 
-                <label>價格</label>
-                <input type="number" id="price" required>
+        <label>價格</label>
+        <input type="number" id="price" required>
 
-                <label>類別</label>
-                <select id="category" required>
-                    <option value="飼料">飼料</option>
-                    <option value="玩具">玩具</option>
-                    <option value="貓砂">貓砂</option>
-                    <option value="貓抓板">貓抓板</option>
-                    <option value="清潔用品">清潔用品</option>
-                    <option value="保健食品">保健食品</option>
-                </select>
+        <label>類別</label>
+        <select id="category" required>
+          <option value="飼料">飼料</option>
+          <option value="玩具">玩具</option>
+          <option value="貓砂">貓砂</option>
+          <option value="貓抓板">貓抓板</option>
+          <option value="清潔用品">清潔用品</option>
+          <option value="保健食品">保健食品</option>
+        </select>
 
-                <label>商品描述（選填）</label>
-                <textarea id="description"></textarea>
+        <label>商品描述（選填）</label>
+        <textarea id="description"></textarea>
 
-                <label>庫存</label>
-                <input type="number" id="stock" value="0">
+        <label>庫存</label>
+        <input type="number" id="stock" value="0">
 
-                <label>商品圖片</label>
-                <input type="file" id="imgUpload" accept="image/*" required>
+        <!-- ⭐ 圖片先用路徑 / 網址（穩定版本） -->
+        <label>商品圖片（圖片路徑或網址）</label>
+        <input type="text" id="image" placeholder="img/product1.jpg" required>
 
-                <button type="submit" class="auth-btn">新增商品</button>
-            </form>=--------------
+        <button type="submit" class="auth-btn">新增商品</button>
+      </form>
 
-            <p id="msg"></p>
-        </div>
+      <p id="msg"></p>
     </div>
+  </div>
 
-    <script src="admin.js"></script>
+  <!-- 權限檢查 -->
+  <script>
+  const adminToken = localStorage.getItem("adminToken");
 
-    <script>
-    setTimeout(() => {
-    if (localStorage.getItem("admin") !== "true") {
-        alert("你沒有後台權限");
-        window.location.href = "login.html";
-    }
-    }, 50);
+  if (!adminToken) {
+    alert("你沒有後台權限，請用管理員登入");
+    location.href = "admin-login.html";
+  }
 </script>
 
 
-
+  <script src="admin.js"></script>
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>訂單詳情</title>
+
+<style>
+    body { font-family: Arial; background:#f2f2f2; margin:0; }
+    .box { max-width: 750px; margin:60px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+    .item { padding:12px 0; border-bottom:1px solid #eee; }
+</style>
+
+</head>
+<body>
+
+<div class="box">
+    <h2>訂單內容</h2>
+    <div id="orderBox">載入中...</div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(location.search);
+const id = urlParams.get("id");
+const token = localStorage.getItem("token");
+
+async function loadDetail() {
+    const res = await fetch("https://teacat-backend-1.onrender.com/order/detail/" + id, {
+        headers: { "Authorization": "Bearer " + token }
+    });
+
+    const data = await res.json();
+    const box = document.getElementById("orderBox");
+
+    if (!data.success) {
+        box.innerHTML = "<p>訂單不存在</p>";
+        return;
+    }
+
+    const order = data.order;
+
+    box.innerHTML = `
+        <p><strong>收件人：</strong>${order.receiver}</p>
+        <p><strong>電話：</strong>${order.phone}</p>
+        <p><strong>地址：</strong>${order.address}</p>
+        <p><strong>總金額：</strong>$${order.total}</p>
+        <hr>
+        <h3>商品列表</h3>
+        ${order.items.map(i => `
+            <div class="item">
+                <p>${i.name} × ${i.qty}</p>
+                <p>$${i.price * i.qty}</p>
+            </div>
+        `).join("")}
+    `;
+}
+
+loadDetail();
+</script>
+
+</body>
+</html>

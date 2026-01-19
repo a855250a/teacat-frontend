@@ -1,71 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入 | 茶貓商店</title>
-    <link rel="stylesheet" href="auth.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登入 | 茶貓商店</title>
+  <link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
-    <div class="auth-wrapper">
-        <div class="auth-card">
-            <h2 class="auth-title">登入會員</h2>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h2 class="auth-title">登入會員</h2>
 
-            <form id="loginForm">
+      <form id="loginForm">
+        <label class="auth-label">Email</label>
+        <input type="email" id="email" required>
 
-                <label class="auth-label">帳號</label>
-                <input type="text" id="email" placeholder="請輸入帳號（Email）" required>
-                <br>
-                <label class="auth-label">密碼</label>
-                <input type="password" id="password" placeholder="請輸入密碼" required>
-                
-                <div class="auth-links">
-                    <br>
-                    <a href="forgot.html">忘記密碼？</a>
-                    <a href="register.html">註冊會員</a>
-                </div>
-                <br>
-                <button type="submit" class="auth-btn">登入</button>
-            </form>
+        <label class="auth-label">密碼</label>
+        <input type="password" id="password" required>
 
-            <p id="msg"></p>
+        <div class="auth-links">
+          <a href="forgot.html">忘記密碼？</a>
+          <a href="register.html">註冊會員</a>
         </div>
+
+        <button type="submit" class="auth-btn">登入</button>
+      </form>
+
+      <p id="msg"></p>
     </div>
+  </div>
 
-    <script>
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    // ⭐ 1️⃣ 先判斷是不是後台管理員（不檢查 email 格式）
-    if (email === "admin" && password === "123") {
-        localStorage.setItem("admin", "true");
-        alert("後台登入成功！");
-        window.location.href = "admin.html"; // ← 後台頁面
-        return;
-    }
-
-    // ⭐ 2️⃣ 再進行一般會員登入（需要 email）
-    const res = await fetch("https://teacat-backend-1.onrender.com/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-    });
-
-    const data = await res.json();
-    document.getElementById("msg").innerText = data.message;
-
-    if (data.success && data.token) {
-        localStorage.setItem("token", data.token);
-        setTimeout(() => {
-            window.location.href = "index.html"; // 一般使用者回首頁
-        }, 600);
-    }
-});
-</script>
-
+  <!-- ✅ 只載入 login.js -->
+  <script src="login.js"></script>
 </body>
 </html>

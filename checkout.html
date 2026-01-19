@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>結帳 | 茶貓商店</title>
+
+    <style>
+        body { font-family: Arial; background: #f5f5f5; margin: 0; padding: 0; }
+        .checkout-wrapper {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .checkout-wrapper h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        input {
+            width: 100%; padding: 12px; border-radius: 8px;
+            border: 1px solid #ccc; font-size: 16px;
+        }
+        .order-box { margin: 20px 0; padding: 20px; border-radius: 8px; background: #fafafa; }
+        .submit-btn {
+            width: 100%;
+            background: #333; color: #fff;
+            padding: 14px; border: none;
+            border-radius: 10px; cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="checkout-wrapper">
+    <h2>結帳資訊</h2>
+
+    <div id="orderItems"></div>
+
+    <h3 id="orderTotal"></h3>
+
+    <div class="input-group">
+        <label>收件人姓名</label>
+        <input type="text" id="receiver" required>
+    </div>
+
+    <div class="input-group">
+        <label>聯絡電話</label>
+        <input type="text" id="phone" required>
+    </div>
+
+    <div class="input-group">
+        <label>收件地址</label>
+        <input type="text" id="address" required>
+    </div>
+
+    <button class="submit-btn" onclick="submitOrder()">送出訂單</button>
+
+    <p id="msg" style="margin-top: 15px; color: green;"></p>
+</div>
+
+<script src="checkout.js"></script>
+
+</body>
+</html>

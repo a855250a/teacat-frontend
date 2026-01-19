@@ -12,24 +12,100 @@
             margin: 0;
             padding: 0;
         }
+
         .cart-wrapper {
-            max-width: 800px;
+            max-width: 900px;
             margin: 120px auto;
             background: #fff;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
+
         h2 {
             margin-top: 0;
         }
+
         .cart-item {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 90px 1fr auto;
+            gap: 20px;
             padding: 15px 0;
             border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .item-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .item-price {
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-control button {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #ddd;
+            cursor: pointer;
+            border-radius: 6px;
             font-size: 18px;
         }
+
+        .delete-btn {
+            align-self: center;
+            color: red;
+            cursor: pointer;
+        }
+
+        .total-box {
+            text-align: right;
+            font-size: 22px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .cart-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .clear-btn, .checkout-btn {
+            width: 48%;
+            padding: 15px;
+            border: none;
+            font-size: 17px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            background: #ccc;
+        }
+
+        .checkout-btn {
+            background: #333;
+            color: white;
+        }
+
         .empty {
             text-align: center;
             color: #777;
@@ -42,27 +118,99 @@
 <body>
 
 <div class="cart-wrapper">
+
     <h2>購物車</h2>
 
     <div id="cartList"></div>
+
+    <div class="total-box" id="totalBox"></div>
+
+    <div class="cart-buttons">
+        <button class="clear-btn" onclick="clearCart()">清空購物車</button>
+        <button class="checkout-btn" onclick="goCheckout()">前往結帳</button>
+    </div>
 </div>
 
+
 <script>
+    // ⭐ 讀取購物車
     function loadCart() {
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
         const list = document.getElementById("cartList");
+        const totalBox = document.getElementById("totalBox");
 
         if (cart.length === 0) {
             list.innerHTML = `<p class="empty">購物車目前是空的</p>`;
+            totalBox.innerHTML = "";
             return;
         }
 
-        list.innerHTML = cart.map(item => `
-            <div class="cart-item">
-                <span>${item.name} × ${item.qty}</span>
-                <span>$${item.price * item.qty}</span>
-            </div>
-        `).join("");
+        let total = 0;
+
+        list.innerHTML = cart.map((item, index) => {
+            total += item.price * item.qty;
+
+            return `
+                <div class="cart-item">
+                    <img src="${item.img}" />
+
+                    <div>
+                        <p class="item-name">${item.name}</p>
+                        <p class="item-price">$${item.price}</p>
+
+                        <div class="qty-control">
+                            <button onclick="changeQty(${index}, -1)">−</button>
+                            <span>${item.qty}</span>
+                            <button onclick="changeQty(${index}, 1)">＋</button>
+                        </div>
+                    </div>
+
+                    <span class="delete-btn" onclick="deleteItem(${index})">刪除</span>
+                </div>
+            `;
+        }).join("");
+
+        totalBox.innerHTML = `總金額：$${total}`;
+    }
+
+    // ⭐ 修改數量
+    function changeQty(index, delta) {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        cart[index].qty += delta;
+
+        // 如果數量小於 1 → 刪除
+        if (cart[index].qty <= 0) cart.splice(index, 1);
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+    }
+
+    // ⭐ 刪除單項商品
+    function deleteItem(index) {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+    }
+
+    // ⭐ 清空購物車
+    function clearCart() {
+        if (confirm("確認清空購物車？")) {
+            localStorage.removeItem("cart");
+            loadCart();
+        }
+    }
+
+    // ⭐ 前往結帳（會員限定）
+    function goCheckout() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("請先登入會員再結帳！");
+            window.location.href = "login.html";
+            return;
+        }
+
+        location.href = "checkout.html";
     }
 
     loadCart();
