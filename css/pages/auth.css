@@ -1,0 +1,136 @@
+body {
+    background: linear-gradient(135deg, #f5f5f5, #eaeaea);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+}
+
+/* 中間容器 */
+.auth-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 卡片 */
+.auth-card {
+    width: 400px;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.auth-card:hover {
+    transform: translateY(-3px);
+}
+
+/* 標題 */
+.auth-title {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* label */
+.auth-label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* input */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+input:focus {
+    border-color: #8a6d36;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(138,109,54,0.15);
+}
+
+/* 按鈕 */
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    background: #8a6d36;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-btn:hover {
+    background: #755a2d;
+    transform: scale(1.02);
+}
+
+/* 連結 */
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.auth-links a {
+    font-size: 14px;
+    color: #8a6d36;
+    text-decoration: none;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.auth-links.center {
+    justify-content: center;
+}
+
+/* 描述 */
+.desc {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #777;
+    text-align: center;
+}
+
+/* 管理員列表 */
+.admin-list {
+    margin-top: 20px;
+}
+
+.admin-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: #f7f7f7;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+/* 刪除按鈕 */
+.delete-btn {
+    background: #c0392b;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: #e74c3c;
+}

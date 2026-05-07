@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>建立初始管理員</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <div class="auth-logo">茶<span>貓</span>商店</div>
+    <h2 class="auth-title">建立管理員帳號</h2>
+    <p class="auth-subtitle">⚠️ 建立完成後請刪除此頁面</p>
+
+    <form id="createForm">
+      <div class="form-group">
+        <label class="form-label">帳號</label>
+        <input class="form-input" type="text" id="username" placeholder="設定管理員帳號" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">密碼</label>
+        <input class="form-input" type="password" id="password" placeholder="設定密碼" required>
+      </div>
+      <button type="submit" class="auth-btn">建立管理員</button>
+    </form>
+
+    <p id="msg" style="margin-top:16px; text-align:center; font-size:14px;"></p>
+
+  </div>
+</div>
+
+<script>
+document.getElementById('createForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('msg');
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  msg.style.color = 'var(--muted)';
+  msg.textContent = '建立中...';
+
+  try {
+    const res = await fetch('https://teacat-backend-1.onrender.com/admin/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      msg.style.color = '#27ae60';
+      msg.textContent = '✅ 建立成功！請記好帳號密碼，然後刪除此頁面。';
+      document.getElementById('createForm').reset();
+    } else {
+      msg.style.color = '#c0392b';
+      msg.textContent = '❌ ' + data.message;
+    }
+  } catch (err) {
+    msg.style.color = '#c0392b';
+    msg.textContent = '❌ 連線失敗，請確認後端是否啟動';
+  }
+});
+</script>
+
+</body>
+</html>

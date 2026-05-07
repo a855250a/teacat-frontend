@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>購物車 | 茶貓商店</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    .page-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 32px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      background: var(--sand);
+    }
+
+    .item-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .item-price {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .qty-btn {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--dark);
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .qty-btn:hover {
+      border-color: var(--brown);
+      color: var(--brown);
+    }
+
+    .qty-num {
+      font-size: 15px;
+      font-weight: 500;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .delete-btn {
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s;
+      border: none;
+      background: none;
+      padding: 4px 8px;
+      font-family: var(--font-sans);
+    }
+
+    .delete-btn:hover { color: #c0392b; }
+
+    .cart-summary {
+      margin-top: 32px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .total-text {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .total-amount {
+      color: var(--brown);
+    }
+
+    .cart-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+      gap: 12px;
+    }
+
+    .empty-box {
+      text-align: center;
+      padding: 80px 0;
+      color: var(--muted);
+    }
+
+    .empty-box .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-box p {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+
+<body class="has-nav">
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">茶<span>貓</span>商店</a>
+  <div class="nav-center">
+    <a href="category.html?category=飼料">飼料</a>
+    <a href="category.html?category=玩具">玩具</a>
+    <a href="category.html?category=貓砂">貓砂</a>
+    <a href="category.html?category=貓抓板">貓抓板</a>
+    <a href="category.html?category=清潔用品">清潔用品</a>
+    <a href="category.html?category=保健食品">保健食品</a>
+  </div>
+  <div class="nav-right">
+    <a href="login.html" id="loginLink">登入</a>
+    <a href="register.html" id="registerLink">註冊</a>
+    <div class="member-menu hidden" id="memberMenu">
+      <div class="member-trigger" id="memberTrigger">
+        <img src="../img/user-avatar.png" class="avatar" onerror="this.style.display='none'">
+        <span id="navEmail">會員</span> ▾
+      </div>
+      <div class="member-dropdown">
+        <a href="member.html">會員中心</a>
+        <a href="order-detail.html">我的訂單</a>
+        <a href="#" id="logoutBtn">登出</a>
+      </div>
+    </div>
+    <div class="admin-menu hidden" id="adminMenu">
+      <a href="admin.html">後台管理</a>
+      <a href="#" id="adminLogoutBtn">登出</a>
+    </div>
+    <a href="cart.html" class="nav-cart">
+      🛍
+      <span class="cart-badge" id="cartBadge">0</span>
+    </a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <h2 class="page-title">購物車</h2>
+  <div id="cartList"></div>
+
+  <div class="cart-summary" id="cartSummary"></div>
+
+  <div class="cart-actions">
+    <button class="btn-outline" onclick="clearCart()">清空購物車</button>
+    <button class="btn-primary" onclick="goCheckout()">前往結帳 →</button>
+  </div>
+</div>
+
+<script>
+  function loadCart() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const list = document.getElementById('cartList');
+    const summary = document.getElementById('cartSummary');
+
+    if (cart.length === 0) {
+      list.innerHTML = `
+        <div class="empty-box">
+          <div class="empty-icon">🛍</div>
+          <p>購物車目前是空的</p>
+          <a href="category.html?category=飼料" class="btn-primary">去逛逛</a>
+        </div>`;
+      summary.innerHTML = '';
+      return;
+    }
+
+    let total = 0;
+    list.innerHTML = cart.map((item, i) => {
+      total += item.price * item.qty;
+      return `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.name}">
+          <div>
+            <p class="item-name">${item.name}</p>
+            <p class="item-price">單價 $${item.price}</p>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${i}, 1)">＋</button>
+            </div>
+          </div>
+          <button class="delete-btn" onclick="deleteItem(${i})">移除</button>
+        </div>`;
+    }).join('');
+
+    summary.innerHTML = `<span class="total-text">總金額：<span class="total-amount">$${total}</span></span>`;
+
+    document.getElementById('cartBadge').textContent = cart.reduce((s, i) => s + i.qty, 0);
+  }
+
+  function changeQty(index, delta) {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart();
+  }
+
+  function deleteItem(index) {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart();
+  }
+
+  function clearCart() {
+    if (confirm('確認清空購物車？')) {
+      localStorage.removeItem('cart');
+      loadCart();
+    }
+  }
+
+  function goCheckout() {
+    if (!localStorage.getItem('token')) {
+      alert('請先登入會員再結帳！');
+      location.href = 'login.html';
+      return;
+    }
+    location.href = 'checkout.html';
+  }
+
+  loadCart();
+</script>
+
+<script src="../js/navbar.js"></script>
+</body>
+</html>

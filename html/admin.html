@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>後台管理 | 茶貓商店</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    .admin-wrapper {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    .admin-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 20px;
+    }
+
+    /* 圖片上傳區 */
+    .img-upload-area {
+      border: 2px dashed rgba(201,169,110,0.4);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .img-upload-area:hover {
+      border-color: var(--brown);
+      background: rgba(138,109,54,0.04);
+    }
+
+    .img-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .img-upload-icon { font-size: 32px; margin-bottom: 8px; }
+
+    .img-upload-text {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .img-upload-text span {
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    .img-preview {
+      display: none;
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      margin-top: 12px;
+    }
+
+    /* 兩欄 grid */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0;
+    }
+
+    /* 狀態訊息 */
+    #msg {
+      margin-top: 16px;
+      font-size: 14px;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    /* 登出按鈕 */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+  </style>
+</head>
+
+<body class="has-nav">
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">茶<span>貓</span>商店</a>
+  <div class="nav-right">
+    <a href="index.html">← 回前台</a>
+    <a href="#" id="adminLogoutBtn" style="color:var(--muted);">登出</a>
+  </div>
+</nav>
+
+<div class="admin-wrapper">
+
+  <div class="top-bar">
+    <div>
+      <h2 class="page-title">後台管理</h2>
+      <p class="page-subtitle">新增商品到茶貓商店</p>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <p class="section-label">商品資訊</p>
+
+    <form id="productForm">
+
+      <div class="form-group">
+        <label class="form-label">商品名稱</label>
+        <input class="form-input" type="text" id="name" placeholder="例：主食罐 85g" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">價格（元）</label>
+          <input class="form-input" type="number" id="price" placeholder="199" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">庫存數量</label>
+          <input class="form-input" type="number" id="stock" value="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">類別</label>
+        <select class="form-input" id="category" required>
+          <option value="飼料">飼料</option>
+          <option value="玩具">玩具</option>
+          <option value="貓砂">貓砂</option>
+          <option value="貓抓板">貓抓板</option>
+          <option value="清潔用品">清潔用品</option>
+          <option value="保健食品">保健食品</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">商品描述（選填）</label>
+        <textarea class="form-input" id="description" placeholder="輸入商品說明..."></textarea>
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="section-label">商品圖片</p>
+
+      <div class="img-upload-area" id="uploadArea">
+        <input type="file" id="imgUpload" accept="image/*">
+        <div class="img-upload-icon">🖼️</div>
+        <p class="img-upload-text">點擊或拖曳圖片至此<br><span>選擇圖片檔案</span></p>
+        <img class="img-preview" id="imgPreview" alt="預覽">
+      </div>
+
+      <button type="submit" class="auth-btn">新增商品</button>
+
+    </form>
+
+    <p id="msg"></p>
+  </div>
+</div>
+
+<!-- 權限檢查 -->
+<script>
+  if (!localStorage.getItem('adminToken')) {
+    alert('請先登入後台');
+    location.href = 'admin-login.html';
+  }
+
+  document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('adminToken');
+    location.href = 'admin-login.html';
+  });
+
+  // 圖片預覽
+  document.getElementById('imgUpload').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    const preview = document.getElementById('imgPreview');
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+    document.querySelector('.img-upload-text').style.display = 'none';
+    document.querySelector('.img-upload-icon').style.display = 'none';
+  });
+</script>
+
+<script src="../js/admin.js"></script>
+
+</body>
+</html>

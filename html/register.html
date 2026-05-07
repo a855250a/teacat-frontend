@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>會員註冊</title>
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/auth.css">
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <h2 class="auth-title">會員註冊</h2>
+
+    <form id="registerForm">
+
+      <label class="auth-label">Email</label>
+      <input type="email" id="email" placeholder="請輸入 Email" required>
+
+      <label class="auth-label">密碼</label>
+      <input type="password" id="password" placeholder="請輸入密碼" required>
+
+      <label class="auth-label">確認密碼</label>
+      <input type="password" id="confirmPassword" placeholder="再次輸入密碼" required>
+
+      <button type="submit" class="auth-btn">註冊</button>
+
+    </form>
+
+    <div class="auth-links center">
+      <a href="login.html">已有帳號？前往登入</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/register.js"></script>
+
+</body>
+</html>

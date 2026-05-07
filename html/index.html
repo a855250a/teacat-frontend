@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>茶貓商店</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #faf6f0;
+      --sand:    #f0e8d8;
+      --tan:     #c9a96e;
+      --brown:   #8a6d36;
+      --dark:    #3d2b1a;
+      --text:    #2c1f10;
+      --muted:   #9a8472;
+      --white:   #ffffff;
+      --nav-h:   64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== NAVBAR ===== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(250, 246, 240, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,169,110,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 999;
+      transition: background 0.3s;
+    }
+
+    .nav-logo {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    .nav-logo span {
+      color: var(--brown);
+    }
+
+    .nav-center {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-center a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-center a:hover {
+      color: var(--brown);
+      background: rgba(138,109,54,0.08);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-right a {
+      font-size: 14px;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-right a:hover { color: var(--brown); }
+
+    .nav-cart {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(138,109,54,0.3);
+      color: var(--brown) !important;
+      font-size: 18px !important;
+      transition: all 0.2s !important;
+    }
+
+    .nav-cart:hover {
+      background: var(--brown) !important;
+      color: var(--white) !important;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--dark);
+      color: var(--white);
+      font-size: 10px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* 會員 dropdown */
+    .member-menu { position: relative; cursor: pointer; }
+    .member-trigger {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .member-trigger:hover { color: var(--brown); background: rgba(138,109,54,0.08); }
+    .member-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: var(--white);
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 140px;
+      box-shadow: 0 12px 32px rgba(61,43,26,0.12);
+      flex-direction: column;
+    }
+    .member-menu.open .member-dropdown { display: flex; }
+    .member-dropdown a {
+      padding: 8px 14px;
+      font-size: 14px;
+      color: var(--text);
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .member-dropdown a:hover { background: var(--sand); }
+    .avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
+
+    .admin-menu { display: flex; align-items: center; gap: 12px; }
+    .admin-menu a { font-size: 14px; color: var(--muted); }
+    .admin-menu a:hover { color: var(--brown); }
+
+    .hidden { display: none !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      margin-top: var(--nav-h);
+      height: 520px;
+      position: relative;
+      overflow: hidden;
+      background: var(--sand);
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+    }
+
+    .hero-media .slide {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .hero-media .slide.active { opacity: 1; }
+
+    /* 右側漸層遮罩，讓文字清晰 */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        transparent 35%,
+        rgba(250,246,240,0.75) 55%,
+        var(--cream) 72%
+      );
+      pointer-events: none;
+    }
+
+    .hero-dots {
+      position: absolute;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 8px;
+      z-index: 3;
+    }
+
+    .hero-dots span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.6);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .hero-dots span.active {
+      width: 22px;
+      border-radius: 3px;
+      background: var(--white);
+    }
+
+    .hero-content {
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 48%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 80px 60px 40px;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--brown);
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+      max-width: 360px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      background: var(--dark);
+      color: var(--white);
+      border: none;
+      border-radius: 30px;
+      font-size: 15px;
+      font-family: 'Noto Sans TC', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary:hover {
+      background: var(--brown);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--dark);
+      border: 1px solid rgba(61,43,26,0.3);
+      border-radius: 30px;
+      font-size: 15px;
+      font-family: 'Noto Sans TC', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--brown);
+      color: var(--brown);
+    }
+
+    /* ===== CATEGORY BAR ===== */
+    .cat-bar {
+      background: var(--white);
+      border-bottom: 1px solid rgba(201,169,110,0.2);
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 40px;
+      overflow-x: auto;
+    }
+
+    .cat-bar a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 20px 24px;
+      font-size: 13px;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .cat-bar a .cat-icon {
+      font-size: 22px;
+    }
+
+    .cat-bar a:hover {
+      color: var(--brown);
+      border-bottom-color: var(--brown);
+    }
+
+    /* ===== FEATURED PRODUCTS ===== */
+    .section {
+      padding: 80px 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .section-link {
+      font-size: 13px;
+      color: var(--brown);
+      border-bottom: 1px solid rgba(138,109,54,0.4);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+
+    .section-link:hover { border-color: var(--brown); }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .product-card {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(201,169,110,0.15);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(61,43,26,0.12);
+      border-color: rgba(201,169,110,0.4);
+    }
+
+    .product-card-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      background: var(--sand);
+    }
+
+    .product-card-body {
+      padding: 16px;
+    }
+
+    .product-card-tag {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 6px;
+    }
+
+    .product-card-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .product-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .product-card-price {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--brown);
+    }
+
+    .add-cart {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--dark);
+      color: var(--white);
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      line-height: 1;
+    }
+
+    .add-cart:hover {
+      background: var(--brown);
+      transform: scale(1.1);
+    }
+
+    /* ===== BRAND STRIP ===== */
+    .brand-strip {
+      background: var(--dark);
+      color: var(--cream);
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+
+    .brand-item-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .brand-item-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--tan);
+    }
+
+    .brand-item-desc {
+      font-size: 13px;
+      color: rgba(250,246,240,0.6);
+      line-height: 1.7;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--cream);
+      border-top: 1px solid rgba(201,169,110,0.2);
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 16px;
+      color: var(--dark);
+      letter-spacing: 2px;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px; right: 30px;
+      background: var(--dark);
+      color: var(--white);
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .hero { height: 360px; }
+      .hero::after {
+        background: linear-gradient(to right, transparent 20%, rgba(250,246,240,0.8) 50%, var(--cream) 68%);
+      }
+      .hero-content { width: 65%; padding: 40px 30px 40px 20px; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .brand-strip { grid-template-columns: 1fr; }
+      .nav-center { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">茶<span>貓</span>商店</a>
+
+  <div class="nav-center">
+    <a href="category.html?category=飼料">飼料</a>
+    <a href="category.html?category=玩具">玩具</a>
+    <a href="category.html?category=貓砂">貓砂</a>
+    <a href="category.html?category=貓抓板">貓抓板</a>
+    <a href="category.html?category=清潔用品">清潔用品</a>
+    <a href="category.html?category=保健食品">保健食品</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="login.html" id="loginLink">登入</a>
+    <a href="register.html" id="registerLink">註冊</a>
+
+    <div class="member-menu hidden" id="memberMenu">
+      <div class="member-trigger" id="memberTrigger">
+        <img src="../img/user-avatar.png" class="avatar" onerror="this.style.display='none'">
+        <span id="navEmail">會員</span> ▾
+      </div>
+      <div class="member-dropdown">
+        <a href="member.html">會員中心</a>
+        <a href="order-detail.html">我的訂單</a>
+        <a href="#" id="logoutBtn">登出</a>
+      </div>
+    </div>
+
+    <div class="admin-menu hidden" id="adminMenu">
+      <a href="admin.html">後台管理</a>
+      <a href="#" id="adminLogoutBtn">登出</a>
+    </div>
+
+    <a href="cart.html" class="nav-cart">
+      🛍
+      <span class="cart-badge" id="cartBadge">0</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-media">
+    <img src="../img/banner1.jpg" class="slide active" alt="banner1">
+    <img src="../img/banner2.jpg" class="slide" alt="banner2">
+    <img src="../img/banner3.jpg" class="slide" alt="banner3">
+    <div class="hero-dots">
+      <span class="active" onclick="goSlide(0)"></span>
+      <span onclick="goSlide(1)"></span>
+      <span onclick="goSlide(2)"></span>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">為你在乎的牠</p>
+    <h1 class="hero-title">
+      為貓咪精選的<br><em>日常好物</em>
+    </h1>
+    <p class="hero-desc">
+      吃的、用的、玩的，每一樣都是我們親自挑選。<br>
+      茶貓商店，只為你在乎的牠。
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="location.href='category.html?category=飼料'">探索商品</button>
+      <button class="btn-outline" onclick="location.href='category.html?category=保健食品'">保健專區</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CATEGORY BAR ===== -->
+<div class="cat-bar">
+  <a href="category.html?category=飼料"><span class="cat-icon">🍖</span>飼料</a>
+  <a href="category.html?category=玩具"><span class="cat-icon">🎾</span>玩具</a>
+  <a href="category.html?category=貓砂"><span class="cat-icon">🪣</span>貓砂</a>
+  <a href="category.html?category=貓抓板"><span class="cat-icon">🌿</span>貓抓板</a>
+  <a href="category.html?category=清潔用品"><span class="cat-icon">🧼</span>清潔用品</a>
+  <a href="category.html?category=保健食品"><span class="cat-icon">💊</span>保健食品</a>
+</div>
+
+<!-- ===== FEATURED PRODUCTS ===== -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">精選商品</h2>
+    <a href="category.html?category=飼料" class="section-link">查看全部 →</a>
+  </div>
+
+  <!-- 載入中 -->
+  <p id="productsLoading" style="color:var(--muted); font-size:14px;">載入商品中...</p>
+
+  <!-- API 動態插入商品卡片 -->
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<!-- ===== BRAND STRIP ===== -->
+<div class="brand-strip">
+  <div>
+    <div class="brand-item-icon">🐾</div>
+    <p class="brand-item-title">親自嚴選</p>
+    <p class="brand-item-desc">每一項商品都經過獸醫師與資深飼主共同把關，確保貓咪安全。</p>
+  </div>
+  <div>
+    <div class="brand-item-icon">📦</div>
+    <p class="brand-item-title">快速出貨</p>
+    <p class="brand-item-desc">訂單成立後 24 小時內出貨，讓你和貓咪不必等太久。</p>
+  </div>
+  <div>
+    <div class="brand-item-icon">💬</div>
+    <p class="brand-item-title">專業諮詢</p>
+    <p class="brand-item-desc">不知道怎麼選？隨時聯繫我們，提供一對一選購建議。</p>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <span class="footer-logo">茶貓商店</span>
+  <span class="footer-copy">© 2025 TeaCat Shop. All rights reserved.</span>
+</footer>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">已加入購物車 ✓</div>
+
+<!-- ===== JS ===== -->
+<script>
+/* 輪播 */
+let slideIdx = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.hero-dots span');
+
+function goSlide(n) {
+  slides[slideIdx].classList.remove('active');
+  dots[slideIdx].classList.remove('active');
+  slideIdx = n;
+  slides[slideIdx].classList.add('active');
+  dots[slideIdx].classList.add('active');
+}
+
+setInterval(() => {
+  goSlide((slideIdx + 1) % slides.length);
+}, 4000);
+
+/* 購物車 badge */
+function updateBadge() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cartBadge').textContent = total;
+}
+updateBadge();
+
+/* 加入購物車 */
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function addToCart(name, price, img) {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const exist = cart.find(p => p.name === name);
+  if (exist) exist.qty++;
+  else cart.push({ name, price, img, qty: 1 });
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateBadge();
+  showToast();
+}
+
+/* 從 API 載入商品 */
+async function loadProducts() {
+  const grid = document.getElementById('productGrid');
+  const loading = document.getElementById('productsLoading');
+
+  try {
+    const res = await fetch('https://teacat-backend-1.onrender.com/products');
+    const data = await res.json();
+    loading.style.display = 'none';
+
+    if (!data.success || data.products.length === 0) {
+      grid.innerHTML = '<p style="color:var(--muted);font-size:14px;">目前尚無商品</p>';
+      return;
+    }
+
+    // 只取前 4 筆當精選
+    const featured = data.products.slice(0, 4);
+
+    grid.innerHTML = featured.map(p => `
+      <div class="product-card">
+        <img src="${p.img}" class="product-card-img" alt="${p.name}">
+        <div class="product-card-body">
+          <p class="product-card-tag">${p.category}</p>
+          <p class="product-card-name">${p.name}</p>
+          <div class="product-card-footer">
+            <span class="product-card-price">$${p.price}</span>
+            <button class="add-cart"
+              onclick="addToCart('${p.name}', ${p.price}, '${p.img}')">+</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+  } catch (err) {
+    loading.textContent = '商品載入失敗，請稍後再試';
+    console.error(err);
+  }
+}
+
+loadProducts();
+
+/* Navbar 登入狀態 */
+const token = localStorage.getItem('token');
+const adminToken = localStorage.getItem('adminToken');
+const user = JSON.parse(localStorage.getItem('userInfo') || '{}');
+
+const loginLink = document.getElementById('loginLink');
+const registerLink = document.getElementById('registerLink');
+const memberMenu = document.getElementById('memberMenu');
+const adminMenu = document.getElementById('adminMenu');
+const navEmail = document.getElementById('navEmail');
+
+loginLink.classList.add('hidden');
+registerLink.classList.add('hidden');
+memberMenu.classList.add('hidden');
+adminMenu.classList.add('hidden');
+
+if (adminToken) {
+  adminMenu.classList.remove('hidden');
+} else if (token) {
+  memberMenu.classList.remove('hidden');
+  if (user.email) navEmail.textContent = user.email;
+} else {
+  loginLink.classList.remove('hidden');
+  registerLink.classList.remove('hidden');
+}
+
+/* dropdown toggle */
+document.getElementById('memberTrigger')?.addEventListener('click', e => {
+  e.stopPropagation();
+  memberMenu.classList.toggle('open');
+});
+document.addEventListener('click', () => memberMenu.classList.remove('open'));
+
+/* 登出 */
+document.getElementById('logoutBtn')?.addEventListener('click', () => {
+  localStorage.clear();
+  location.reload();
+});
+document.getElementById('adminLogoutBtn')?.addEventListener('click', () => {
+  localStorage.clear();
+  location.reload();
+});
+</script>
+
+</body>
+</html>

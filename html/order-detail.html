@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>訂單詳情 | 茶貓商店</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/components.css">
+<style>
+  .page-wrapper { max-width: 750px; margin: 0 auto; padding: 40px 20px 80px; }
+  .page-title { font-family: var(--font-serif); font-size: 26px; font-weight: 600; color: var(--dark); margin-bottom: 32px; }
+  .order-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow); }
+  .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { color: var(--muted); }
+  .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .item-row:last-child { border-bottom: none; }
+  .section-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--tan); margin: 24px 0 12px; }
+</style>
+</head>
+
+<body class="has-nav">
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">茶<span>貓</span>商店</a>
+  <div class="nav-center">
+    <a href="category.html?category=飼料">飼料</a>
+    <a href="category.html?category=玩具">玩具</a>
+    <a href="category.html?category=貓砂">貓砂</a>
+    <a href="category.html?category=貓抓板">貓抓板</a>
+    <a href="category.html?category=清潔用品">清潔用品</a>
+    <a href="category.html?category=保健食品">保健食品</a>
+  </div>
+  <div class="nav-right">
+    <a href="login.html" id="loginLink">登入</a>
+    <a href="register.html" id="registerLink">註冊</a>
+    <div class="member-menu hidden" id="memberMenu">
+      <div class="member-trigger" id="memberTrigger">
+        <img src="../img/user-avatar.png" class="avatar" onerror="this.style.display='none'">
+        <span id="navEmail">會員</span> ▾
+      </div>
+      <div class="member-dropdown">
+        <a href="member.html">會員中心</a>
+        <a href="order-detail.html">我的訂單</a>
+        <a href="#" id="logoutBtn">登出</a>
+      </div>
+    </div>
+    <div class="admin-menu hidden" id="adminMenu">
+      <a href="admin.html">後台管理</a>
+      <a href="#" id="adminLogoutBtn">登出</a>
+    </div>
+    <a href="cart.html" class="nav-cart">
+      🛍
+      <span class="cart-badge" id="cartBadge">0</span>
+    </a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <h2 class="page-title">訂單詳情</h2>
+  <div class="order-card" id="orderBox">載入中...</div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(location.search);
+const id = urlParams.get("id");
+const token = localStorage.getItem("token");
+
+async function loadDetail() {
+  const res = await fetch("https://teacat-backend-1.onrender.com/order/detail/" + id, {
+    headers: { "Authorization": "Bearer " + token }
+  });
+
+  const data = await res.json();
+  const box = document.getElementById("orderBox");
+
+  if (!data.success) {
+    box.innerHTML = "<p style='color:var(--muted)'>訂單不存在</p>";
+    return;
+  }
+
+  const order = data.order;
+
+  box.innerHTML = `
+    <p class="section-label">收件資訊</p>
+    <div class="info-row"><span class="info-label">收件人</span><span>${order.receiver}</span></div>
+    <div class="info-row"><span class="info-label">電話</span><span>${order.phone}</span></div>
+    <div class="info-row"><span class="info-label">地址</span><span>${order.address}</span></div>
+    <div class="info-row"><span class="info-label">總金額</span><span style="color:var(--brown);font-weight:500">$${order.total}</span></div>
+    <p class="section-label">商品列表</p>
+    ${order.items.map(i => `
+      <div class="item-row">
+        <span>${i.name} × ${i.qty}</span>
+        <span>$${i.price * i.qty}</span>
+      </div>
+    `).join("")}
+  `;
+}
+
+loadDetail();
+</script>
+
+<script src="../js/navbar.js"></script>
+</body>
+</html>

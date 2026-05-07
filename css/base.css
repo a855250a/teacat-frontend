@@ -1,0 +1,52 @@
+/* =============================================
+   base.css — 全站設計系統
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+:root {
+  --cream:      #faf6f0;
+  --sand:       #f0e8d8;
+  --tan:        #c9a96e;
+  --brown:      #8a6d36;
+  --dark:       #3d2b1a;
+  --text:       #2c1f10;
+  --muted:      #9a8472;
+  --white:      #ffffff;
+  --border:     rgba(201,169,110,0.2);
+  --shadow:     0 12px 32px rgba(61,43,26,0.1);
+  --nav-h:      64px;
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --font-serif: 'Noto Serif TC', serif;
+  --font-sans:  'Noto Sans TC', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.hidden { display: none !important; }
