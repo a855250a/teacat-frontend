@@ -59,47 +59,77 @@
 </nav>
 
 <div class="page-wrapper">
-  <h2 class="page-title">訂單詳情</h2>
-  <div class="order-card" id="orderBox">載入中...</div>
+  <h2 class="page-title" id="pageTitle">我的訂單</h2>
+  <div id="orderBox">載入中...</div>
 </div>
 
 <script>
+const BACKEND = "https://teacat-backend-1.onrender.com";
 const urlParams = new URLSearchParams(location.search);
 const id = urlParams.get("id");
-const orderToken = localStorage.getItem("token");
+const token = localStorage.getItem("token");
+const box = document.getElementById("orderBox");
 
-async function loadDetail() {
-  const res = await fetch("https://teacat-backend-1.onrender.com/order/detail/" + id, {
-    headers: { "Authorization": "Bearer " + orderToken }
-  });
-
-  const data = await res.json();
-  const box = document.getElementById("orderBox");
-
-  if (!data.success) {
-    box.innerHTML = "<p style='color:var(--muted)'>訂單不存在</p>";
-    return;
-  }
-
-  const order = data.order;
-
-  box.innerHTML = `
-    <p class="section-label">收件資訊</p>
-    <div class="info-row"><span class="info-label">收件人</span><span>${order.receiver}</span></div>
-    <div class="info-row"><span class="info-label">電話</span><span>${order.phone}</span></div>
-    <div class="info-row"><span class="info-label">地址</span><span>${order.address}</span></div>
-    <div class="info-row"><span class="info-label">總金額</span><span style="color:var(--brown);font-weight:500">$${order.total}</span></div>
-    <p class="section-label">商品列表</p>
-    ${order.items.map(i => `
-      <div class="item-row">
-        <span>${i.name} × ${i.qty}</span>
-        <span>$${i.price * i.qty}</span>
+if (!token) {
+  box.innerHTML = "<p style='color:var(--muted)'>請先登入</p>";
+} else if (id) {
+  // 顯示單筆訂單
+  document.getElementById("pageTitle").innerText = "訂單明細";
+  fetch(`${BACKEND}/orders/${id}`, {
+    headers: { "Authorization": "Bearer " + token }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (!data.success) { box.innerHTML = "<p style='color:var(--muted)'>訂單不存在</p>"; return; }
+    const o = data.order;
+    box.innerHTML = `
+      <div class="order-card">
+        <p class="section-label">收件資訊</p>
+        <div class="info-row"><span class="info-label">收件人</span><span>${o.receiver}</span></div>
+        <div class="info-row"><span class="info-label">電話</span><span>${o.phone}</span></div>
+        <div class="info-row"><span class="info-label">地址</span><span>${o.address}</span></div>
+        <div class="info-row"><span class="info-label">狀態</span><span>${o.status}</span></div>
+        <div class="info-row"><span class="info-label">總金額</span><span style="color:var(--brown);font-weight:500">$${o.totalAmount}</span></div>
+        <p class="section-label">商品列表</p>
+        ${o.items.map(i => `
+          <div class="item-row">
+            <span>${i.name} × ${i.qty}</span>
+            <span>$${i.price * i.qty}</span>
+          </div>
+        `).join("")}
       </div>
-    `).join("")}
-  `;
+      <a href="order-detail.html" style="display:inline-block;margin-top:20px;color:var(--brown);font-size:14px;">← 回到所有訂單</a>
+    `;
+  });
+} else {
+  // 列出所有訂單
+  fetch(`${BACKEND}/orders`, {
+    headers: { "Authorization": "Bearer " + token }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (!data.success || !data.orders.length) {
+      box.innerHTML = "<p style='color:var(--muted);font-size:14px;'>目前沒有訂單</p>";
+      return;
+    }
+    box.innerHTML = data.orders.map(o => `
+      <div class="order-card" style="margin-bottom:16px;cursor:pointer;" onclick="location.href='order-detail.html?id=${o._id}'">
+        <div class="info-row">
+          <span class="info-label">訂單日期</span>
+          <span>${new Date(o.createdAt).toLocaleDateString("zh-TW")}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">共 ${o.items.length} 項商品</span>
+          <span style="color:var(--brown);font-weight:500">$${o.totalAmount}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">狀態</span>
+          <span>${o.status}</span>
+        </div>
+      </div>
+    `).join("");
+  });
 }
-
-loadDetail();
 </script>
 
 <script src="../js/navbar.js"></script>
