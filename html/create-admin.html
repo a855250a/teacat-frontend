@@ -44,7 +44,7 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
   msg.textContent = '建立中...';
 
   try {
-    const res = await fetch('https://teacat-backend-1.onrender.com/admin/create', {
+    const res = await fetch('https://teacat-backend.onrender.com/admin/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })

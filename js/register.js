@@ -6,11 +6,12 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
+    const gender = document.getElementById("gender").value;
 
-    const res = await fetch("https://teacat-backend.onrender.com/register", {
+    const res = await fetch("https://teacat-backend-1.onrender.com/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, password, gender })
     });
 
     const data = await res.json();

@@ -24,7 +24,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
       // ✅ 存會員資訊（給 member 頁用）
       localStorage.setItem("userInfo", JSON.stringify({
-        email: email
+        email: email,
+        name: data.name,
+        gender: data.gender
       }));
 
       // 清掉管理員（避免混亂）

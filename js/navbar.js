@@ -22,7 +22,12 @@ if (adminToken) {
   adminMenu.classList.remove("hidden");
 } else if (token) {
   memberMenu.classList.remove("hidden");
-  if (user.email) navEmail.innerText = user.email;
+  if (user.name) {
+    const title = user.gender === "male" ? "先生" : "小姐";
+    navEmail.innerText = user.name + " " + title;
+  } else if (user.email) {
+    navEmail.innerText = user.email;
+  }
 } else {
   loginLink.classList.remove("hidden");
   registerLink.classList.remove("hidden");

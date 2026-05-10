@@ -34,7 +34,7 @@
 
 /* 商品 */
 .products {
-  padding: 40px;
+  padding: 24px 40px;
 }
 
 .product-grid {
@@ -45,4 +45,78 @@
 
 .product-card img {
   width: 100%;
+}
+
+/* 分類頁商品 Grid */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.category-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(201,169,110,0.15);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(61,43,26,0.12);
+  border-color: rgba(201,169,110,0.4);
+}
+
+.category-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  background: #f0e8d8;
+}
+
+.category-card h5 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #3d2b1a;
+  margin: 12px 16px 4px;
+}
+
+.category-card .price {
+  font-size: 17px;
+  font-weight: 500;
+  color: #8a6d36;
+  margin: 0 16px 4px;
+}
+
+.category-card .rating {
+  font-size: 13px;
+  color: #9a8472;
+  margin: 0 16px 12px;
+}
+
+.category-card .add-cart {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 0 16px 16px;
+  padding: 10px;
+  background: #3d2b1a;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.category-card .add-cart:hover {
+  background: #8a6d36;
+}
+
+@media (max-width: 900px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

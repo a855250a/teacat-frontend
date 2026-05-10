@@ -176,7 +176,8 @@
 
     .hero-media {
       position: absolute;
-      inset: 0;
+      left: 0; top: 0; bottom: 0;
+      width: 52%;
     }
 
     .hero-media .slide {
@@ -184,22 +185,24 @@
       inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
+      object-position: center center;
       opacity: 0;
       transition: opacity 0.8s ease;
     }
 
     .hero-media .slide.active { opacity: 1; }
 
-    /* 右側漸層遮罩，讓文字清晰 */
     .hero::after {
       content: '';
       position: absolute;
-      inset: 0;
+      left: 38%;
+      top: 0; bottom: 0; right: 0;
       background: linear-gradient(
         to right,
-        transparent 35%,
-        rgba(250,246,240,0.75) 55%,
-        var(--cream) 72%
+        transparent 0%,
+        rgba(250,246,240,0.4) 20%,
+        rgba(250,246,240,0.85) 45%,
+        var(--cream) 65%
       );
       pointer-events: none;
     }
@@ -765,7 +768,12 @@ if (adminToken) {
   adminMenu.classList.remove('hidden');
 } else if (token) {
   memberMenu.classList.remove('hidden');
-  if (user.email) navEmail.textContent = user.email;
+  if (user.name) {
+    const title = user.gender === 'male' ? '先生' : '小姐';
+    navEmail.textContent = user.name + ' ' + title;
+  } else if (user.email) {
+    navEmail.textContent = user.email;
+  }
 } else {
   loginLink.classList.remove('hidden');
   registerLink.classList.remove('hidden');

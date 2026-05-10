@@ -19,6 +19,16 @@
 
     <form id="registerForm">
 
+      <label class="auth-label">姓名</label>
+      <input type="text" id="name" placeholder="請輸入姓名" required>
+
+      <label class="auth-label">稱謂</label>
+      <select id="gender" class="form-input" required>
+        <option value="">請選擇</option>
+        <option value="male">先生</option>
+        <option value="female">小姐</option>
+      </select>
+
       <label class="auth-label">Email</label>
       <input type="email" id="email" placeholder="請輸入 Email" required>
 
@@ -29,6 +39,8 @@
       <input type="password" id="confirmPassword" placeholder="再次輸入密碼" required>
 
       <button type="submit" class="auth-btn">註冊</button>
+
+      <p id="msg" style="text-align:center; margin-top:12px; font-size:14px; color:#8a6d36;"></p>
 
     </form>
 

@@ -66,11 +66,11 @@
 <script>
 const urlParams = new URLSearchParams(location.search);
 const id = urlParams.get("id");
-const token = localStorage.getItem("token");
+const orderToken = localStorage.getItem("token");
 
 async function loadDetail() {
   const res = await fetch("https://teacat-backend-1.onrender.com/order/detail/" + id, {
-    headers: { "Authorization": "Bearer " + token }
+    headers: { "Authorization": "Bearer " + orderToken }
   });
 
   const data = await res.json();
