@@ -67,16 +67,16 @@
 const BACKEND = "https://teacat-backend-1.onrender.com";
 const urlParams = new URLSearchParams(location.search);
 const id = urlParams.get("id");
-const token = localStorage.getItem("token");
+const userToken = localStorage.getItem("token");
 const box = document.getElementById("orderBox");
 
-if (!token) {
+if (!userToken) {
   box.innerHTML = "<p style='color:var(--muted)'>請先登入</p>";
 } else if (id) {
   // 顯示單筆訂單
   document.getElementById("pageTitle").innerText = "訂單明細";
   fetch(`${BACKEND}/orders/${id}`, {
-    headers: { "Authorization": "Bearer " + token }
+    headers: { "Authorization": "Bearer " + userToken }
   })
   .then(r => r.json())
   .then(data => {
@@ -104,7 +104,7 @@ if (!token) {
 } else {
   // 列出所有訂單
   fetch(`${BACKEND}/orders`, {
-    headers: { "Authorization": "Bearer " + token }
+    headers: { "Authorization": "Bearer " + userToken }
   })
   .then(r => r.json())
   .then(data => {
